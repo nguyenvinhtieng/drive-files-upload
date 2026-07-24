@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Drive Files — Upload & Download</title>
+  <title>Cloudinary Drive</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -11,112 +11,182 @@
 </head>
 <body>
   <div class="app">
-    <aside class="sidebar">
-      <div class="brand">
-        <div class="brand-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-            <polyline points="17 8 12 3 7 8"/>
-            <line x1="12" y1="3" x2="12" y2="15"/>
-          </svg>
+    <header class="header">
+      <div class="header-top">
+        <div class="brand">
+          <div class="brand-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+            </svg>
+          </div>
+          <div>
+            <h1>Cloudinary Drive</h1>
+            <p class="brand-sub">File management &amp; upload</p>
+          </div>
         </div>
-        <div>
-          <h1>Drive Files</h1>
-          <p class="brand-sub">Upload &amp; tải xuống</p>
+
+        <div class="header-stats">
+          <div class="stat-pill">
+            <span id="stat-folders" class="stat-pill__value">0</span>
+            <span class="stat-pill__label">folders</span>
+          </div>
+          <div class="stat-pill">
+            <span id="stat-count" class="stat-pill__value">0</span>
+            <span class="stat-pill__label">file</span>
+          </div>
+          <div class="stat-pill stat-pill--accent">
+            <span id="stat-size" class="stat-pill__value">0 B</span>
+            <span class="stat-pill__label">storage</span>
+          </div>
         </div>
       </div>
 
-      <div class="folder-card">
-        <span class="folder-label">Thư mục Cloudinary</span>
-        <span id="folder-name" class="folder-name">—</span>
+      <div class="header-cloud">
+        <span class="cloud-badge" id="cloud-name">Cloudinary</span>
+        <nav id="browse-breadcrumb" class="breadcrumb" aria-label="Folder path"></nav>
       </div>
-
-      <div class="stats">
-        <div class="stat">
-          <span id="stat-count" class="stat-value">0</span>
-          <span class="stat-label">File</span>
-        </div>
-        <div class="stat">
-          <span id="stat-size" class="stat-value">0 B</span>
-          <span class="stat-label">Tổng dung lượng</span>
-        </div>
-      </div>
-    </aside>
+    </header>
 
     <main class="main">
-      <section class="upload-section">
-        <div id="drop-zone" class="drop-zone" tabindex="0" role="button" aria-label="Kéo thả file hoặc bấm để chọn">
-          <div class="drop-zone-inner">
-            <div class="drop-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M12 2v12m0 0l4-4m-4 4L8 10"/>
-                <path d="M4 14v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/>
-              </svg>
-            </div>
-            <p class="drop-title">Kéo thả file vào đây</p>
-            <p class="drop-hint">Hỗ trợ ZIP, RAR, 7z và các file khác — tối đa 50MB</p>
-            <form id="upload-form">
-              <input type="file" id="file-input" name="file" hidden>
-              <button type="button" id="browse-btn" class="btn btn-secondary">Chọn file</button>
-              <button type="submit" id="upload-btn" class="btn btn-primary" disabled>Upload</button>
-            </form>
-          </div>
-          <div id="selected-file" class="selected-file hidden">
-            <div class="selected-file-info">
-              <span id="selected-icon" class="file-icon file-icon--zip" aria-hidden="true"></span>
-              <div>
-                <span id="selected-name" class="selected-name"></span>
-                <span id="selected-size" class="selected-size"></span>
-              </div>
-            </div>
-            <div class="selected-file-actions">
-              <button type="button" id="clear-file" class="btn btn-ghost">Bỏ chọn</button>
-              <button type="submit" id="upload-btn-selected" class="btn btn-primary" form="upload-form">Upload</button>
-            </div>
-          </div>
-        </div>
-        <p id="upload-status" class="toast hidden" role="status"></p>
-      </section>
-
-      <section class="files-section">
-        <div class="files-toolbar">
-          <h2>Danh sách file</h2>
+      <section class="panel browser-panel">
+        <div class="panel-header panel-header--toolbar">
+          <h2>File browser</h2>
           <div class="toolbar-actions">
             <div class="search-box">
               <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                 <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
               </svg>
-              <input type="search" id="search-input" placeholder="Tìm theo tên file..." autocomplete="off">
+              <input type="search" id="search-input" placeholder="Search by name..." autocomplete="off">
             </div>
-            <select id="sort-select" class="sort-select" aria-label="Sắp xếp">
-              <option value="date-desc">Mới nhất</option>
-              <option value="date-asc">Cũ nhất</option>
-              <option value="name-asc">Tên A→Z</option>
-              <option value="name-desc">Tên Z→A</option>
-              <option value="size-desc">Lớn nhất</option>
-              <option value="size-asc">Nhỏ nhất</option>
+            <select id="sort-select" class="sort-select" aria-label="Sort">
+              <option value="folders-first">Folders first</option>
+              <option value="date-desc">Newest</option>
+              <option value="date-asc">Oldest</option>
+              <option value="name-asc">Name A→Z</option>
+              <option value="name-desc">Name Z→A</option>
+              <option value="size-desc">Largest</option>
+              <option value="size-asc">Smallest</option>
             </select>
-            <button type="button" id="refresh-btn" class="btn btn-ghost" title="Làm mới">
+            <button type="button" id="open-upload-btn" class="btn btn-primary btn-icon-label" title="Upload file">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M12 2v12m0 0l4-4m-4 4L8 10"/>
+                <path d="M4 14v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/>
+              </svg>
+              <span class="btn-label">Upload</span>
+            </button>
+            <button type="button" id="new-folder-btn" class="btn btn-secondary btn-icon-label" title="Create new folder">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                <line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/>
+              </svg>
+              <span class="btn-label">New folder</span>
+            </button>
+            <button type="button" id="refresh-btn" class="btn btn-ghost btn-icon-only" title="Refresh" aria-label="Refresh">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                 <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
               </svg>
-              Làm mới
             </button>
           </div>
         </div>
 
-        <p id="list-status" class="toast hidden" role="status"></p>
+        <div class="browser-body">
+          <p id="list-status" class="toast hidden" role="status"></p>
 
-        <div id="files-list" class="files-list">
-          <div class="skeleton-list">
-            <div class="skeleton-item"></div>
-            <div class="skeleton-item"></div>
-            <div class="skeleton-item"></div>
+          <div id="selection-bar" class="selection-bar hidden" role="toolbar" aria-label="Select and manage items">
+            <label class="selection-bar__select-all">
+              <input type="checkbox" id="select-all-checkbox" aria-label="Select all files and folders">
+              <span id="select-all-label">Select all</span>
+            </label>
+            <span id="selection-count" class="selection-bar__count hidden" aria-live="polite"></span>
+            <div id="selection-actions" class="selection-bar__actions hidden">
+              <button type="button" id="clear-selection-btn" class="btn btn-ghost btn-sm">Clear selection</button>
+              <button type="button" id="delete-selected-btn" class="btn btn-danger btn-sm">Delete selected</button>
+            </div>
+          </div>
+
+          <div id="files-list" class="files-grid">
+            <div class="skeleton-grid">
+              <div class="skeleton-card"></div>
+              <div class="skeleton-card"></div>
+              <div class="skeleton-card"></div>
+              <div class="skeleton-card"></div>
+            </div>
           </div>
         </div>
       </section>
     </main>
   </div>
+
+  <dialog id="upload-dialog" class="dialog upload-dialog">
+    <form id="upload-form" class="dialog-content">
+      <h3>Upload file</h3>
+      <p class="dialog-hint">Location: <nav id="upload-breadcrumb" class="breadcrumb breadcrumb--inline" aria-label="Upload location"></nav></p>
+
+      <input type="file" id="file-input" name="file" multiple hidden>
+
+      <div id="drop-zone" class="upload-drop-zone" tabindex="0" role="button" aria-label="Drag and drop files or click to select">
+        <div class="upload-drop-zone-inner">
+          <div class="drop-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 2v12m0 0l4-4m-4 4L8 10"/>
+              <path d="M4 14v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/>
+            </svg>
+          </div>
+          <div class="upload-drop-copy">
+            <p class="upload-drop-title">Drag and drop files here</p>
+            <p class="upload-drop-hint">Images, ZIP, RAR and other files — up to 50MB per file, up to 50 files</p>
+          </div>
+          <button type="button" id="browse-btn" class="btn btn-secondary">Choose files</button>
+        </div>
+        <div id="selected-files" class="selected-files hidden">
+          <ul id="selected-files-list" class="selected-files-list" aria-label="Selected files"></ul>
+          <div class="selected-files-footer">
+            <span id="selected-files-summary" class="selected-files-summary"></span>
+            <button type="button" id="clear-file" class="btn btn-ghost btn-sm">Clear selection</button>
+          </div>
+        </div>
+      </div>
+
+      <p id="upload-status" class="toast hidden" role="status"></p>
+
+      <div class="dialog-actions">
+        <button type="button" id="cancel-upload-btn" class="btn btn-ghost">Cancel</button>
+        <button type="submit" id="upload-btn" class="btn btn-primary" disabled>Upload</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="new-folder-dialog" class="dialog">
+    <form id="new-folder-form" method="dialog" class="dialog-content">
+      <h3>Create new folder</h3>
+      <p class="dialog-hint">The folder will be created in the current location.</p>
+      <input type="text" id="new-folder-input" class="dialog-input" placeholder="Folder name" required autocomplete="off">
+      <div class="dialog-actions">
+        <button type="button" id="cancel-folder-btn" class="btn btn-ghost">Cancel</button>
+        <button type="submit" class="btn btn-primary">Create</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="preview-dialog" class="dialog preview-dialog">
+    <div class="preview-dialog-content">
+      <div class="preview-header">
+        <h3 id="preview-title">Preview</h3>
+        <button type="button" id="close-preview-btn" class="btn-icon" aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="preview-body">
+        <img id="preview-image" src="" alt="">
+      </div>
+      <div class="preview-footer">
+        <a id="preview-download" class="btn btn-primary" href="#" download>Download</a>
+        <button type="button" id="preview-copy-link" class="btn btn-ghost">Copy link</button>
+      </div>
+    </div>
+  </dialog>
 
   <script src="/app.js"></script>
 </body>

@@ -9,21 +9,34 @@ const upload = multer({
   limits: { fileSize: 50 * 1024 * 1024 },
 });
 
-router.post('/', upload.single('file'), async (req, res) => {
+router.post('/', upload.array('file', 50), async (req, res) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({ error: 'Không có file được gửi lên' });
+    if (!req.files?.length) {
+      return res.status(400).json({ error: 'No files were uploaded' });
     }
 
-    const file = await cloudinaryService.uploadFile(req.file.buffer, req.file.originalname);
+    const folderPath = req.body?.path || req.query?.path || '';
+    const { files, failed } = await cloudinaryService.uploadFiles(req.files, folderPath);
 
-    res.status(201).json({
+    const payload = {
       success: true,
-      file: { id: file.id, name: file.name, secureUrl: file.secureUrl },
-    });
+      files: files.map((file) => ({
+        id: file.id,
+        name: file.name,
+        secureUrl: file.secureUrl,
+        folderPath: file.folderPath,
+      })),
+      ...(failed.length ? { failed } : {}),
+    };
+
+    if (failed.length) {
+      return res.status(files.length ? 200 : 500).json(payload);
+    }
+
+    res.status(201).json(payload);
   } catch (error) {
     console.error('Upload error:', error);
-    res.status(500).json({ error: error.message || 'Upload thất bại' });
+    res.status(error.status || 500).json({ error: error.message || 'Upload failed' });
   }
 });
 
