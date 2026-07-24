@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drive Files — Upload & Download</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+        </div>
+        <div>
+          <h1>Drive Files</h1>
+          <p class="brand-sub">Upload &amp; tải xuống</p>
+        </div>
+      </div>
+
+      <div class="folder-card">
+        <span class="folder-label">Thư mục Cloudinary</span>
+        <span id="folder-name" class="folder-name">—</span>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <span id="stat-count" class="stat-value">0</span>
+          <span class="stat-label">File</span>
+        </div>
+        <div class="stat">
+          <span id="stat-size" class="stat-value">0 B</span>
+          <span class="stat-label">Tổng dung lượng</span>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <section class="upload-section">
+        <div id="drop-zone" class="drop-zone" tabindex="0" role="button" aria-label="Kéo thả file hoặc bấm để chọn">
+          <div class="drop-zone-inner">
+            <div class="drop-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M12 2v12m0 0l4-4m-4 4L8 10"/>
+                <path d="M4 14v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/>
+              </svg>
+            </div>
+            <p class="drop-title">Kéo thả file vào đây</p>
+            <p class="drop-hint">Hỗ trợ ZIP, RAR, 7z và các file khác — tối đa 50MB</p>
+            <form id="upload-form">
+              <input type="file" id="file-input" name="file" hidden>
+              <button type="button" id="browse-btn" class="btn btn-secondary">Chọn file</button>
+              <button type="submit" id="upload-btn" class="btn btn-primary" disabled>Upload</button>
+            </form>
+          </div>
+          <div id="selected-file" class="selected-file hidden">
+            <div class="selected-file-info">
+              <span id="selected-icon" class="file-icon file-icon--zip" aria-hidden="true"></span>
+              <div>
+                <span id="selected-name" class="selected-name"></span>
+                <span id="selected-size" class="selected-size"></span>
+              </div>
+            </div>
+            <div class="selected-file-actions">
+              <button type="button" id="clear-file" class="btn btn-ghost">Bỏ chọn</button>
+              <button type="submit" id="upload-btn-selected" class="btn btn-primary" form="upload-form">Upload</button>
+            </div>
+          </div>
+        </div>
+        <p id="upload-status" class="toast hidden" role="status"></p>
+      </section>
+
+      <section class="files-section">
+        <div class="files-toolbar">
+          <h2>Danh sách file</h2>
+          <div class="toolbar-actions">
+            <div class="search-box">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <input type="search" id="search-input" placeholder="Tìm theo tên file..." autocomplete="off">
+            </div>
+            <select id="sort-select" class="sort-select" aria-label="Sắp xếp">
+              <option value="date-desc">Mới nhất</option>
+              <option value="date-asc">Cũ nhất</option>
+              <option value="name-asc">Tên A→Z</option>
+              <option value="name-desc">Tên Z→A</option>
+              <option value="size-desc">Lớn nhất</option>
+              <option value="size-asc">Nhỏ nhất</option>
+            </select>
+            <button type="button" id="refresh-btn" class="btn btn-ghost" title="Làm mới">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+              </svg>
+              Làm mới
+            </button>
+          </div>
+        </div>
+
+        <p id="list-status" class="toast hidden" role="status"></p>
+
+        <div id="files-list" class="files-list">
+          <div class="skeleton-list">
+            <div class="skeleton-item"></div>
+            <div class="skeleton-item"></div>
+            <div class="skeleton-item"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

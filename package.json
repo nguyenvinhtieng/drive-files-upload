@@ -1,0 +1,26 @@
+{
+  "name": "drive-files-upload",
+  "version": "1.0.0",
+  "description": "Express app for uploading files to Cloudinary",
+  "main": "src/server.js",
+  "scripts": {
+    "build": "echo \"No build step\"",
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "express",
+    "cloudinary",
+    "upload"
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "cloudinary": "^2.10.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "multer": "^1.4.5-lts.1"
+  }
+}
