@@ -9,7 +9,7 @@
     "dev": "node --watch src/server.js"
   },
   "engines": {
-    "node": ">=18"
+    "node": "22.x"
   },
   "keywords": [
     "express",
@@ -21,6 +21,6 @@
     "cloudinary": "^2.10.0",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "multer": "^1.4.5-lts.1"
+    "multer": "^2.2.0"
   }
 }
