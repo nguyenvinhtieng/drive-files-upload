@@ -220,6 +220,30 @@ body::before {
   user-select: none;
 }
 
+.path-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.125rem;
+  min-width: 0;
+  margin-bottom: 0.625rem;
+}
+
+.path-bar .breadcrumb-item {
+  font-size: 0.875rem;
+  padding: 0.375rem 0.5rem;
+  max-width: min(220px, 40vw);
+}
+
+.path-bar .breadcrumb-item--root {
+  color: var(--text);
+}
+
+.path-bar .breadcrumb-item:not(.breadcrumb-item--root):last-of-type {
+  color: var(--accent);
+  font-weight: 600;
+}
+
 /* Main */
 .main {
   flex: 1;
@@ -265,6 +289,7 @@ body::before {
   justify-content: space-between;
   gap: 1rem;
   flex-wrap: wrap;
+  margin-bottom: 0.875rem;
 }
 
 /* Upload dialog */
@@ -720,8 +745,9 @@ body::before {
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   overflow: visible;
-  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s, background 0.15s;
   position: relative;
+  min-width: 0;
 }
 
 .grid-item:has(.grid-item__menu-btn[aria-expanded="true"]) {
@@ -729,23 +755,48 @@ body::before {
 }
 
 .grid-item--selected {
-  border-color: var(--accent);
+  border-color: rgba(91, 124, 250, 0.55);
+  background: var(--accent-soft);
   box-shadow: 0 0 0 2px var(--accent-glow);
 }
 
 .grid-item__select {
   position: absolute;
-  top: 0.5rem;
-  left: 0.5rem;
+  top: 0.375rem;
+  left: 0.375rem;
   z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: transparent;
+  transition: background 0.15s, opacity 0.15s;
 }
 
 .grid-item__select input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
+  margin: 0;
   accent-color: var(--accent);
   cursor: pointer;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+  opacity: 0.3;
+  box-shadow: none;
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.grid-item:hover .grid-item__select input[type="checkbox"],
+.grid-item__select input[type="checkbox"]:focus-visible {
+  opacity: 0.55;
+}
+
+.grid-item--selected .grid-item__select {
+  background: rgba(91, 124, 250, 0.22);
+}
+
+.grid-item--selected .grid-item__select input[type="checkbox"] {
+  opacity: 1;
 }
 
 .grid-item:hover {
@@ -917,6 +968,8 @@ body::before {
 
 .grid-item__body {
   padding: 0.625rem 0.75rem 0.75rem;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .grid-item__name {
@@ -927,19 +980,24 @@ body::before {
   overflow: hidden;
   text-overflow: ellipsis;
   margin-bottom: 0.125rem;
+  max-width: 100%;
 }
 
 .grid-item__meta {
+  display: block;
   font-size: 0.6875rem;
   color: var(--text-muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .folder-open-btn {
   all: unset;
-  display: contents;
+  display: block;
+  width: 100%;
+  min-width: 0;
   cursor: pointer;
 }
 
